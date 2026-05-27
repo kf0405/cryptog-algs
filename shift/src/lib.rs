@@ -2,16 +2,16 @@ use std::fs::{self, File};
 use std::io::{self, Write};
 use std::path::Path;
 
-pub fn encrypt(path: &str) -> io::Result<()> {
+pub fn encrypt(path: &str, key: u8) -> io::Result<()> {
     let plaintext = fs::read(path)?;
-    let ciphertext: Vec<u8> = plaintext.iter().map(|&x| x.wrapping_add(3)).collect();
+    let ciphertext: Vec<u8> = plaintext.iter().map(|&x| x.wrapping_add(key)).collect();
     write_to_new_path(path, "enc", &ciphertext)?;
     Ok(())
 }
 
-pub fn decrypt(path: &str) -> io::Result<()> {
+pub fn decrypt(path: &str, key: u8) -> io::Result<()> {
     let ciphertext = fs::read(path)?;
-    let plaintext: Vec<u8> = ciphertext.iter().map(|&x| x.wrapping_sub(3)).collect();
+    let plaintext: Vec<u8> = ciphertext.iter().map(|&x| x.wrapping_sub(key)).collect();
     write_to_new_path(path, "dec", &plaintext)?;
     Ok(())
 }
